@@ -10,13 +10,9 @@ async def validate_uploaded_file(file: UploadFile) -> None:
     Validates file size and MIME type.
     Raises custom exceptions if validation fails.
     """
-    # 1. Validate File Size
-    file.file.seek(0, os.SEEK_END)
-    file_size = file.file.tell()
-    file.file.seek(0)
-    
-    if file_size > settings.max_upload_size_bytes:
-        logger.warning(f"File size exceeded: {file_size} bytes")
+    # 1. Validate File Size using FastAPI's built-in size attribute
+    if file.size is not None and file.size > settings.max_upload_size_bytes:
+        logger.warning(f"File size exceeded: {file.size} bytes")
         raise FileSizeExceededError(f"File size exceeds maximum allowed size of {settings.max_upload_size_mb} MB")
         
     # 2. Validate Extension
@@ -28,7 +24,7 @@ async def validate_uploaded_file(file: UploadFile) -> None:
         
     # 3. Validate MIME Type (using magic)
     header = await file.read(2048)
-    file.file.seek(0)
+    await file.seek(0) # Proper async seek for UploadFile
     
     mime = magic.from_buffer(header, mime=True)
     allowed_mimes = ["image/jpeg", "image/png", "application/dicom", "image/dicom"]

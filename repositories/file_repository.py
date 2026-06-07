@@ -16,7 +16,14 @@ class FileRepository:
     def save_file(self, file: UploadFile, filename: str) -> str:
         """Saves the file to local disk and returns the path."""
         try:
-            file_path = os.path.join(self.upload_dir, filename)
+            # Security: Sanitize filename to prevent path traversal
+            safe_filename = os.path.basename(filename)
+            file_path = os.path.abspath(os.path.join(self.upload_dir, safe_filename))
+            
+            # Double check that the resolved path is still within upload_dir
+            if not file_path.startswith(os.path.abspath(self.upload_dir)):
+                raise ValueError("Path traversal attempt detected.")
+
             with open(file_path, "wb") as buffer:
                 shutil.copyfileobj(file.file, buffer)
             file.file.seek(0) # reset for subsequent reads

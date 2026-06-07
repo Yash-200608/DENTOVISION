@@ -1,19 +1,13 @@
-from fastapi import APIRouter, UploadFile, File, Depends
+from fastapi import APIRouter, UploadFile, File, Depends, Request
 from api.schemas import PredictionResponse, FindingSchema
 from inference.yolo_detector import YOLODetector
 from services.prediction_service import PredictionService
 
 router = APIRouter()
 
-# Global detector instance loaded once at startup for performance
-# In a true production app, this would be managed via application lifespan events.
-detector_instance = None
-
-def get_detector():
-    global detector_instance
-    if detector_instance is None:
-        detector_instance = YOLODetector()
-    return detector_instance
+def get_detector(request: Request) -> YOLODetector:
+    """Retrieves the pre-loaded YOLO detector from app state."""
+    return request.app.state.detector
 
 def get_prediction_service(detector: YOLODetector = Depends(get_detector)) -> PredictionService:
     return PredictionService(detector=detector)
