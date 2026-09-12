@@ -3,10 +3,10 @@ import numpy as np
 from ultralytics import YOLO
 import os
 
-from inference.base import BaseDetector
-from core.config import settings
-from core.logger import logger
-from core.exceptions import ModelLoadError, PredictionError
+from dentovision.inference.base import BaseDetector
+from dentovision.core.config import settings
+from dentovision.core.logger import logger
+from dentovision.core.exceptions import ModelLoadError, PredictionError
 
 class YOLODetector(BaseDetector):
     """YOLOv8 implementation of the BaseDetector."""

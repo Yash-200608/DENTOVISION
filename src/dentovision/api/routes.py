@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Depends, Request
-from api.schemas import PredictionResponse, FindingSchema
-from inference.yolo_detector import YOLODetector
-from services.prediction_service import PredictionService
+from dentovision.api.schemas import PredictionResponse, FindingSchema
+from dentovision.inference.yolo_detector import YOLODetector
+from dentovision.services.prediction_service import PredictionService
 
 router = APIRouter()
 

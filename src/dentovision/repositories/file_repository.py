@@ -1,6 +1,6 @@
 import os
 from fastapi import UploadFile
-from core.logger import logger
+from dentovision.core.logger import logger
 import shutil
 
 class FileRepository:

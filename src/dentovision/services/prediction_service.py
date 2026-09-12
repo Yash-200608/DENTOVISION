@@ -3,11 +3,11 @@ import numpy as np
 import cv2
 from typing import List, Dict, Any
 
-from inference.base import BaseDetector
-from utils.file_utils import validate_uploaded_file
-from utils.dicom_utils import dicom_to_numpy
-from core.logger import logger
-from core.exceptions import InvalidImageError
+from dentovision.inference.base import BaseDetector
+from dentovision.utils.file_utils import validate_uploaded_file
+from dentovision.utils.dicom_utils import dicom_to_numpy
+from dentovision.core.logger import logger
+from dentovision.core.exceptions import InvalidImageError
 
 class PredictionService:
     def __init__(self, detector: BaseDetector):

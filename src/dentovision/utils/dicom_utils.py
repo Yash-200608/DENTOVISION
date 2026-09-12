@@ -2,8 +2,8 @@ import pydicom
 import numpy as np
 import cv2
 from io import BytesIO
-from core.exceptions import InvalidImageError
-from core.logger import logger
+from dentovision.core.exceptions import InvalidImageError
+from dentovision.core.logger import logger
 
 def dicom_to_numpy(file_bytes: bytes) -> np.ndarray:
     """

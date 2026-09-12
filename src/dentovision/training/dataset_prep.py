@@ -2,8 +2,8 @@ import os
 import shutil
 import random
 from typing import List, Tuple
-from core.logger import logger
-from utils.dicom_utils import save_dicom_as_png
+from dentovision.core.logger import logger
+from dentovision.utils.dicom_utils import save_dicom_as_png
 
 class DentalDatasetPrep:
     """
@@ -76,7 +76,7 @@ class DentalDatasetPrep:
         
         # 2. Annotation conversion (if COCO provided)
         if coco_json:
-            from training.converters import COCOToYOLOConverter
+            from dentovision.training.converters import COCOToYOLOConverter
             label_dir = os.path.join(self.processed_data_dir, "labels_temp")
             converter = COCOToYOLOConverter(coco_json, label_dir)
             converter.convert()

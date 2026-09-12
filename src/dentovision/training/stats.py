@@ -2,7 +2,7 @@ import os
 from collections import Counter
 from typing import Dict, List, Any
 import yaml
-from core.logger import logger
+from dentovision.core.logger import logger
 
 class DatasetStats:
     """

@@ -3,11 +3,11 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import router
-from core.config import settings
-from core.logger import logger
-from core.exceptions import DentovisionException
-from inference.yolo_detector import YOLODetector
+from dentovision.api.routes import router
+from dentovision.core.config import settings
+from dentovision.core.logger import logger
+from dentovision.core.exceptions import DentovisionException
+from dentovision.inference.yolo_detector import YOLODetector
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

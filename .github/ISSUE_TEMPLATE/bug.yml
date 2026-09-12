@@ -1,0 +1,51 @@
+name: Bug report
+description: Report a functional defect in the API, inference, or training tools.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do **not** attach radiographs, DICOM files, or any patient-identifying data.
+        Describe the failure with synthetic or de-identified examples only.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What went wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Commands, endpoints, and synthetic file types (for example "1x1 PNG named test.png").
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Status codes, error JSON, or log lines with filenames redacted.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, Docker or local, commit SHA if known.
+    validations:
+      required: true
+  - type: checkboxes
+    id: phi
+    attributes:
+      label: Data handling
+      options:
+        - label: This report contains no PHI, DICOM headers, or clinical images.
+          required: true

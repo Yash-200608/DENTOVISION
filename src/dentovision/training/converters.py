@@ -1,7 +1,7 @@
 import json
 import os
 from typing import Dict, List, Any
-from core.logger import logger
+from dentovision.core.logger import logger
 
 class COCOToYOLOConverter:
     """

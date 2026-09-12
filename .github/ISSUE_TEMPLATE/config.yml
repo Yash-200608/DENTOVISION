@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/Yash-200608/DENTOVISION/security/advisories/new
+    about: Report vulnerabilities privately. Do not attach patient files or PHI.

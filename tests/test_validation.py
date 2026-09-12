@@ -1,9 +1,9 @@
 import pytest
 from fastapi import UploadFile
 import io
-from utils.file_utils import validate_uploaded_file
-from core.exceptions import InvalidImageError, FileSizeExceededError
-from core.config import settings
+from dentovision.utils.file_utils import validate_uploaded_file
+from dentovision.core.exceptions import InvalidImageError, FileSizeExceededError
+from dentovision.core.config import settings
 
 @pytest.mark.asyncio
 async def test_validate_invalid_extension():

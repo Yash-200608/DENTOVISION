@@ -18,12 +18,15 @@ RUN apt-get update && apt-get install -y \
     libmagic1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and install
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy package metadata and install Python dependencies
+COPY requirements.txt pyproject.toml ./
+COPY src ./src
+RUN pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir --no-deps .
 
-# Copy application source code
-COPY . .
+# Copy remaining runtime assets (configs, fallback weights)
+COPY configs ./configs
+COPY yolov8n.pt ./yolov8n.pt
 
 # Set permissions for the non-root user
 RUN chown -R appuser:appuser /app
@@ -32,7 +35,7 @@ RUN chown -R appuser:appuser /app
 USER appuser
 
 # Set environment variables
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/app/src
 ENV API_HOST=0.0.0.0
 ENV API_PORT=8000
 
@@ -40,4 +43,4 @@ ENV API_PORT=8000
 EXPOSE 8000
 
 # Command to run the application using variables
-CMD uvicorn api.app:app --host $API_HOST --port $API_PORT
+CMD uvicorn dentovision.api.app:app --host $API_HOST --port $API_PORT

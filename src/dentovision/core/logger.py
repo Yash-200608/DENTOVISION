@@ -2,7 +2,7 @@ import logging
 import sys
 from logging.handlers import RotatingFileHandler
 import os
-from core.config import settings
+from dentovision.core.config import settings
 
 def setup_logger() -> logging.Logger:
     """

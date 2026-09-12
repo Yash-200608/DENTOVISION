@@ -1,0 +1,31 @@
+name: Feature request
+description: Propose an enhancement for maintainers of this private project.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This repository is proprietary. Only request work you are authorized to discuss.
+        Do not include patient data or third-party confidential material.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is missing or painful today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Desired behavior, endpoints, or training workflow.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches and why they are insufficient.
+    validations:
+      required: false

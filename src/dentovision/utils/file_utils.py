@@ -1,9 +1,9 @@
 import os
 import magic
 from fastapi import UploadFile
-from core.config import settings
-from core.exceptions import InvalidImageError, FileSizeExceededError
-from core.logger import logger
+from dentovision.core.config import settings
+from dentovision.core.exceptions import InvalidImageError, FileSizeExceededError
+from dentovision.core.logger import logger
 
 async def validate_uploaded_file(file: UploadFile) -> None:
     """

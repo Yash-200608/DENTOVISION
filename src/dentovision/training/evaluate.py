@@ -1,6 +1,6 @@
 import argparse
 from ultralytics import YOLO
-from core.logger import logger
+from dentovision.core.logger import logger
 
 def evaluate_model(weights_path: str, data_yaml: str):
     """

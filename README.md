@@ -1,57 +1,104 @@
-# DENTOVISION 🦷
+# DENTOVISION
 
-DENTOVISION is an MCC-funded research prototype for AI-assisted dental radiograph interpretation. It leverages YOLOv8 to detect dental caries and periapical lesions in radiographs and exposes these capabilities via a RESTful FastAPI backend.
+DENTOVISION is a research prototype for AI-assisted dental radiograph interpretation. It uses YOLOv8 to detect `caries` and `periapical_lesion` in PNG, JPEG, and DICOM radiographs and serves results through a FastAPI REST API.
 
-## 🚀 Features
+**This software is proprietary.** See [LICENSE](LICENSE). No patent license is granted. Do not publish, redistribute, or use this codebase without written permission.
 
-- **Object Detection:** Detects `caries` and `periapical_lesion` with bounding boxes.
-- **RESTful API:** Fast, documented (Swagger), and robust REST API via FastAPI.
-- **DICOM Support:** Native processing of medical DICOM files along with standard formats (PNG, JPEG).
-- **Containerized:** Fully Dockerized for seamless deployment.
-- **Clean Architecture:** Built on SOLID principles, ready for future AI and AR extensions.
+**Not a medical device. Not for clinical use.** Predictions are experimental and must not be used for diagnosis or treatment decisions.
 
-## 📁 Project Structure
+## Features
 
-```
-dentovision/
-├── api/             # FastAPI app, routes, schemas
-├── configs/         # Model and environment configurations
-├── core/            # Config, logger, custom exceptions
-├── datasets/        # Data for training (git-ignored)
-├── inference/       # Base detector and YOLO implementation
-├── models/          # Trained weights (.pt files)
-├── repositories/    # File storage and database logic
-├── services/        # Business logic layer
-├── tests/           # Pytest suite
-├── training/        # YOLO model training and evaluation scripts
-├── utils/           # Utilities for files and DICOM
-```
+- Object detection for `caries` and `periapical_lesion` with bounding boxes
+- REST API with OpenAPI docs at `/docs`
+- Native DICOM (`.dcm`) plus PNG/JPEG uploads
+- Docker image with a non-root runtime user
+- Detector abstraction (`BaseDetector`) so other models can be swapped in later
 
-## 🛠️ Quick Start
+## Requirements
 
-### 1. Local Setup
+- Python 3.11+
+- pip
+- Optional: Docker
+- Trained weights at `models/best.pt` (the API falls back to `yolov8n.pt` if that file is missing)
 
-1. **Clone the repository.**
-2. **Create a virtual environment:** `python -m venv venv`
-3. **Activate it:** `source venv/bin/activate` (Linux/Mac) or `venv\Scripts\activate` (Windows)
-4. **Install requirements:** `pip install -r requirements.txt`
-5. **Configure environment:** Copy `.env.example` to `.env` and adjust the variables.
-6. **Download YOLO weights:** Place your `best.pt` in the `models/` directory.
+On Windows, `python-magic` needs libmagic. Install `python-magic-bin` in the same virtualenv, or use Docker (the image already includes `libmagic1`).
 
-### 2. Run the API
+## Quick start
 
 ```bash
-uvicorn api.app:app --reload --host 0.0.0.0 --port 8000
+git clone https://github.com/Yash-200608/DENTOVISION.git
+cd DENTOVISION
+python -m venv venv
 ```
-Navigate to `http://localhost:8000/docs` to view the interactive API documentation.
 
-### 3. Docker Deployment
+Activate the environment (`source venv/bin/activate` on Linux/macOS, `venv\Scripts\activate` on Windows), then:
+
+```bash
+pip install -r requirements.txt
+pip install -e .
+copy .env.example .env   # Windows: copy   |  Linux/macOS: cp .env.example .env
+```
+
+Place trained weights at `models/best.pt`, then start the API:
+
+```bash
+uvicorn dentovision.api.app:app --reload --host 0.0.0.0 --port 8000
+```
+
+- Swagger UI: http://localhost:8000/docs
+- Health: http://localhost:8000/health
+
+### Docker
 
 ```bash
 docker build -t dentovision-api .
 docker run -p 8000:8000 --env-file .env dentovision-api
 ```
 
-## 🧠 Future Extensibility
+### Tests
 
-The codebase relies on strict abstraction (`BaseDetector`). Integrating AR overlay modules, LLM-based clinical explanations, or voice assistants can be achieved without modifying core API endpoints.
+```bash
+pytest
+```
+
+## Project structure
+
+```
+dentovision/
+├── src/dentovision/   # Installable Python package
+│   ├── api/           # FastAPI app, routes, schemas
+│   ├── core/          # Settings, logger, exceptions
+│   ├── inference/     # BaseDetector and YOLOv8 implementation
+│   ├── repositories/  # Local file storage (not used by /predict today)
+│   ├── services/      # Prediction business logic
+│   ├── training/      # Train, evaluate, and dataset prep
+│   └── utils/         # Upload validation and DICOM conversion
+├── configs/           # YOLO data.yaml
+├── models/            # Trained weights (git-ignored except .gitkeep)
+├── datasets/          # Training data (git-ignored except .gitkeep)
+├── tests/             # Pytest suite
+├── docs/              # Setup, API, training, and deployment guides
+└── .github/           # CI, issue templates, pull request template
+```
+
+## Documentation
+
+| Doc | Contents |
+| --- | --- |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Layers, request flow, and endpoints |
+| [docs/getting-started.md](docs/getting-started.md) | Local setup (Windows and Linux) |
+| [docs/api.md](docs/api.md) | `/health`, `/predict`, curl examples |
+| [docs/training.md](docs/training.md) | Dataset layout and train/eval commands |
+| [docs/deployment.md](docs/deployment.md) | Docker and runtime configuration |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to propose changes |
+| [SECURITY.md](SECURITY.md) | Vulnerability reporting and data handling |
+| [CHANGELOG.md](CHANGELOG.md) | Release history |
+
+## Extensibility
+
+New detectors should implement `dentovision.inference.base.BaseDetector`. Training and evaluation run as modules:
+
+```bash
+python -m dentovision.training.train --data configs/data.yaml --epochs 100 --imgsz 640 --batch 16 --weights yolov8n.pt
+python -m dentovision.training.evaluate --weights models/best.pt --data configs/data.yaml
+```

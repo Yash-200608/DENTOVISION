@@ -1,6 +1,6 @@
 import argparse
 from ultralytics import YOLO
-from core.logger import logger
+from dentovision.core.logger import logger
 
 def train_model(data_yaml: str, epochs: int, imgsz: int, batch_size: int, weights: str):
     """

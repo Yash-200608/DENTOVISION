@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 from typing import List, Tuple
-from core.logger import logger
+from dentovision.core.logger import logger
 
 def preprocess_image(image_path: str, target_size: Tuple[int, int] = (640, 640)) -> np.ndarray:
     """

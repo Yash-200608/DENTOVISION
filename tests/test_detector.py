@@ -1,5 +1,5 @@
 import numpy as np
-from inference.yolo_detector import YOLODetector
+from dentovision.inference.yolo_detector import YOLODetector
 
 def test_detector_initialization():
     detector = YOLODetector(model_path="dummy_path.pt", conf_threshold=0.5)

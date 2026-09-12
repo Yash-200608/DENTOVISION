@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from api.app import app
+from dentovision.api.app import app
 
 client = TestClient(app)
 
